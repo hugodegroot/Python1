@@ -23,12 +23,20 @@ def makeUser(sock):
 
 def getServerData():
     try:
+        BUFF_SIZE = 4096
+        data = b''
         while True:
-            data = sock.recv(4096)
+            part = sock.recv(BUFF_SIZE)
+            data += part
+            # print(data)
             if not data : 
                 print("Socket is closed.")
                 break
-            else : print(data.decode("utf-8"))
+            elif data[-1] == "/n":
+                data.split("/n")
+            elif len(part) < BUFF_SIZE : 
+                print(data.decode("utf-8"))
+                data = b''
     except OSError as msg:
         print(msg)
 
